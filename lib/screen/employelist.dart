@@ -16,30 +16,35 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       'role': 'Software Engineer',
       'applicationDate': '2023-01-15',
       'email': 'john.doe@example.com',
+      'employeeCode': 'EMP001',
     },
     {
       'name': 'Jane Smith',
       'role': 'Product Manager',
       'applicationDate': '2023-02-20',
       'email': 'jane.smith@example.com',
+      'employeeCode': 'EMP001',
     },
     {
       'name': 'Mike Johnson',
       'role': 'UX Designer',
       'applicationDate': '2023-03-10',
       'email': 'mike.johnson@example.com',
+      'employeeCode': 'EMP001',
     },
     {
       'name': 'Emily Brown',
       'role': 'Data Analyst',
       'applicationDate': '2023-04-05',
       'email': 'emily.brown@example.com',
+      'employeeCode': 'EMP001',
     },
     {
       'name': 'David Lee',
       'role': 'DevOps Engineer',
       'applicationDate': '2023-05-01',
       'email': 'david.lee@example.com',
+      'employeeCode': 'EMP001',
     },
   ];
 
@@ -138,6 +143,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                   role: employee['role']!,
                   applicationDate: employee['applicationDate']!,
                   email: employee['email']!,
+                  employeeCode: employee['employeeCode']!,
                 );
               },
             ),

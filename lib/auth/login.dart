@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hrms/auth/keycloack.dart';
-import 'package:hrms/navigation/navigation.dart';
 import 'package:hrms/auth/enteremail.dart';
 import 'package:hrms/auth/logincomponents.dart';
+import 'package:go_router/go_router.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -34,14 +34,14 @@ class _LoginState extends State<Login> {
       final password = _passwordController.text;
       try {
         final response = await getToken(email, password);
-        if (response != null ) {
-          await storage.write(
-          key: 'access_token', value: response['access_token']);
-          //ignore: use_build_context_synchronously
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage()),
-          );
+        if (response != null && response['access_token'] != null) {
+          await storage.write(key: 'access_token', value: response['access_token']);
+          if (context.mounted) {
+            // ignore: use_build_context_synchronously
+            context.go('/home/dashboard');
+          }
         } else {
-          kwarning('Invalid credentials. Please contact the admin');
+          throw Exception('Failed to login');
         }
       } catch (e) {
         kerror("An error occurred. Please try again later");

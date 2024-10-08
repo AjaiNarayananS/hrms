@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:hrms/screen/dashboard.dart';
-import 'package:hrms/screen/employelist.dart';
-import 'package:hrms/screen/profile.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Widget child;
+  const HomePage({super.key, required this.child});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,18 +13,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const AssessmentScreen(),
-    const EmployeeListScreen(),
-    const ProfileScreen(),
+  static final List<String> _routeNames = [
+    '/home/dashboard',
+    '/home/assessment',
+    '/home/employee-list',
+    '/home/profile',
   ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: widget.child,
       bottomNavigationBar: Container(
         color: theme.primaryColor,
         child: Padding(
@@ -49,6 +48,7 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _selectedIndex = index;
               });
+              context.go(_routeNames[index]);
             },
           ),
         ),
@@ -57,14 +57,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
-class AssessmentScreen extends StatelessWidget {
-  const AssessmentScreen({super.key});
+class RouterWidget extends StatelessWidget {
+  const RouterWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Assessment'));
+    return const SizedBox.expand();
   }
 }
 

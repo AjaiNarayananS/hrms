@@ -26,7 +26,7 @@ ThemeData lightTheme = ThemeData(
     headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: lprimaryColor),
     headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: lprimaryColor),
     headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
-    titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
+    titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
     titleMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
     titleSmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
     bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),

@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TilesCard extends StatelessWidget {
-  final String pendingCount;
-  final String requestCount;
-  final String totalCount;
-  final String availableCount;
+  final List<TileData> tiles;
 
-  const TilesCard({
-    super.key,
-    required this.pendingCount,
-    required this.requestCount,
-    required this.totalCount,
-    required this.availableCount,
-  });
+  const TilesCard({super.key, required this.tiles});
 
   @override
   Widget build(BuildContext context) {
@@ -20,36 +11,29 @@ class TilesCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInfoTile('Pending', pendingCount, Colors.orange)),
-              const SizedBox(width: 16),
-              Expanded(
-                  child: _buildInfoTile('Request', requestCount, Colors.blue)),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInfoTile('Total', totalCount, Colors.green)),
-              const SizedBox(width: 16),
-              Expanded(
-                  child:
-                      _buildInfoTile('Available', availableCount, Colors.purple)),
-            ],
-          ),
+          for (int i = 0; i < tiles.length; i += 2)
+            Column(
+              children: [
+                if (i > 0) const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(child: _buildInfoTile(tiles[i])),
+                    const SizedBox(width: 16),
+                    Expanded(child: i + 1 < tiles.length ? _buildInfoTile(tiles[i + 1]) : const SizedBox()),
+                  ],
+                ),
+              ],
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoTile(String title, String value, Color color) {
+  Widget _buildInfoTile(TileData tileData) {
     return Container(
       height: 120,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: tileData.color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -59,7 +43,7 @@ class TilesCard extends StatelessWidget {
             width: 5,
             height: 100,
             decoration: BoxDecoration(
-              color: color,
+              color: tileData.color,
               borderRadius: BorderRadius.circular(2.5),
             ),
           ),
@@ -71,11 +55,11 @@ class TilesCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    title,
+                    tileData.title,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: color,
+                      color: tileData.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -84,16 +68,16 @@ class TilesCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        value,
+                        tileData.value,
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: color,
+                          color: tileData.color,
                         ),
                       ),
                       Icon(
-                        _getIconForTitle(title),
-                        color: color,
+                        tileData.icon,
+                        color: tileData.color,
                         size: 48,
                       ),
                     ],
@@ -106,19 +90,13 @@ class TilesCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  IconData _getIconForTitle(String title) {
-    switch (title.toLowerCase()) {
-      case 'pending':
-        return Icons.pending;
-      case 'request':
-        return Icons.request_page;
-      case 'total':
-        return Icons.people;
-      case 'available':
-        return Icons.check_circle;
-      default:
-        return Icons.info;
-    }
-  }
+class TileData {
+  final String title;
+  final String value;
+  final Color color;
+  final IconData icon;
+
+  TileData({required this.title, required this.value, required this.color, required this.icon});
 }

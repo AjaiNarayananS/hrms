@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:hrms/components/detailscard.dart';
+import 'package:hrms/components/experiencecard.dart';
+import 'package:hrms/components/livpiechart.dart';
+import 'package:hrms/components/profilecard.dart';
+import 'package:hrms/components/tabview.dart';
+import 'package:hrms/main.dart';
+import 'package:provider/provider.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,53 +17,27 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _status = 'Active';
-  List<Map<String, dynamic>> _experiences = [];
-  Map<String, String> _personalDetails = {
-    'Date of Birth': '15/05/1990',
-    'Gender': 'Male',
-    'Nationality': 'American',
-    'Marital Status': 'Single',
+
+  final Map<int, Map<String, int>> _leaveData = {
+    2023: {'Allotted': 20, 'Used': 10, 'Balance': 10, 'sick': 2, 'casual': 4},
+    2022: {'Allotted': 18, 'Used': 15, 'Balance': 3, 'sick': 3, 'casual': 4},
+    2021: {'Allotted': 16, 'Used': 12, 'Balance': 4, 'sick': 2, 'casual': 3},
   };
 
   @override
-  void initState() {
-    super.initState();
-    _loadExperiences();
-  }
-
-  void _loadExperiences() {
-    String jsonString = '''
-    [
-      {
-        "role": "Project Manager",
-        "company": "Rits Consulting",
-        "location": "Bangalore, India",
-        "date": "Jan 2020 - Present",
-        "logoUrl": "https://th.bing.com/th/id/R.0d64b05dfd05db057c80c3e815ca47b4?rik=P8RLfkg%2fq%2famBg&riu=http%3a%2f%2fwww.ritsconsulting.com%2fwp-content%2fuploads%2f2018%2f09%2fritsConsulting-New.png&ehk=wOcUZfk5z3zz%2fYmTZuZcP0tlA3rU%2fzEabAORRTiaI2k%3d&risl=&pid=ImgRaw&r=0"
-      },
-      {
-        "role": "Senior Developer",
-        "company": "Rits Consulting",
-        "location": "Bangalore, India",
-        "date": "Mar 2015 - Dec 2019",
-        "logoUrl": "https://th.bing.com/th/id/R.0d64b05dfd05db057c80c3e815ca47b4?rik=P8RLfkg%2fq%2famBg&riu=http%3a%2f%2fwww.ritsconsulting.com%2fwp-content%2fuploads%2f2018%2f09%2fritsConsulting-New.png&ehk=wOcUZfk5z3zz%2fYmTZuZcP0tlA3rU%2fzEabAORRTiaI2k%3d&risl=&pid=ImgRaw&r=0"
-      }
-    ]
-    ''';
-
-    setState(() {
-      _experiences = List<Map<String, dynamic>>.from(json.decode(jsonString));
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final userDetailsProvider = Provider.of<UserDetailsProvider>(context);
+    final userData = userDetailsProvider.userDetails;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Profile', style: Theme.of(context).textTheme.headlineLarge,),
+            Text(
+              'Profile',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
             DropdownButton<String>(
               style: Theme.of(context).textTheme.bodyMedium,
               borderRadius: BorderRadius.circular(20),
@@ -78,418 +59,152 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Colors.grey.shade300, width: 0.1),
-                ),
-                elevation: 0,
+      body: SafeArea(
+        child: userData == null
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CircleAvatar(
-                            radius: 40,
-                            backgroundImage: NetworkImage(
-                                'https://www.bing.com/th?id=OIP.jQvFuRlmVesA7K6ArjfyrAHaH9&w=150&h=161&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2'),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text('John Doe',
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .focusColor
-                                        .withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    'Software Developer',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Department',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium),
-                                Text('Testing',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Date of Joining',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium),
-                                Text('01/01/2023',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).focusColor.withOpacity(0.2),
-                        ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.email,
-                                size: 19,
-                                color: Theme.of(context).secondaryHeaderColor,
-                              ),
-                              title: Text('john.doe@example.com',
-                                  style:
-                                      Theme.of(context).textTheme.labelLarge),
-                            ),
-                            const Divider(
-                              height: 0.1,
-                              thickness: 0.1,
-                              color: Colors.grey,
-                            ),
-                            ListTile(
-                              leading: Icon(
-                                Icons.phone,
-                                size: 19,
-                                color: Theme.of(context).secondaryHeaderColor,
-                              ),
-                              title: Text('+1 234 567 8900',
-                                  style:
-                                      Theme.of(context).textTheme.labelLarge),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Colors.grey.shade300, width: 0.1),
-                ),
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Personal Details',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => _showEditDialog(context),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .focusColor
-                                    .withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit,
-                                      size: 12,
-                                      color: Theme.of(context)
-                                          .secondaryHeaderColor),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Edit',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      ProfileCard(
+                        name: userData['name'] ?? '',
+                        employeeCode: userData['employeeCode'] ?? '',
+                        jobTitle: userData['role'] ?? '',
+                        department: userData['department'] ?? '',
+                        dateOfJoining: userData['dateOfJoining'] ?? '',
+                        email: userData['email'] ?? '',
+                        phone: userData['mobileNo'] ?? '',
+                        avatarUrl: userData['avatar'] ?? '',
                       ),
                       const SizedBox(height: 16),
-                      ..._personalDetails.entries.map(
-                          (entry) => _buildDetailRow(entry.key, entry.value)),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Colors.grey.shade300, width: 0.1),
-                ),
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Experience',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // TODO: Implement edit functionality
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .focusColor
-                                    .withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit,
-                                      size: 10,
-                                      color: Theme.of(context)
-                                          .secondaryHeaderColor),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Edit',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      DetailsCard(
+                        title: 'General Details',
+                        details: {
+                          'Prefix': userData['Prefix'] ?? '',
+                          'Mode of Employment': userData['ModeofEmployment'] ?? '',
+                          'Role': userData['role'] ?? '',
+                          'Business Unit': userData['BusinessUnit'] ?? '',
+                          'Reporting Manager': userData['ReportingManager'] ?? '',
+                          'Years of Experience': userData['YearsofExperience'] ?? '',
+                        },
+                        onEdit: (updatedDetails) {
+                          // Handle the updated details here
+                        },
                       ),
                       const SizedBox(height: 16),
-                      ..._experiences.map((exp) => _buildExperienceItem(
-                            role: exp['role'],
-                            company: exp['company'],
-                            location: exp['location'],
-                            date: exp['date'],
-                            logoUrl: exp['logoUrl'],
-                          )),
+                      DetailsCard(
+                        title: 'Personal Details',
+                        details: {
+                          'Date of Birth': userData['DateofBirth'] ?? '',
+                          'Gender': userData['Gender'] ?? '',
+                          'Nationality': userData['Nationality'] ?? '',
+                          'Marital Status': userData['MaritalStatus'] ?? '',
+                        },
+                        onEdit: (updatedDetails) {
+                          // Handle the updated details here
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ExperienceCard(
+                        experiences: (userData['workExperience'] as List<dynamic>?)
+                            ?.map((exp) => Map<String, String>.from(exp as Map<String, dynamic>))
+                            .toList() ?? [],
+                        onEdit: (index) {
+                          // Handle editing experience at index, or adding new if index is -1
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTabView(
+                        title: 'Other Details',
+                        tabs: const <Tab>[
+                          Tab(text: 'Leaves'),
+                          Tab(text: 'Skills'),
+                        ],
+                        tabViews: <Widget>[
+                          LeaveTab(leaveData: _leaveData),
+                          const Center(child: Text("No Data Here")),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
+}
 
-  Widget _buildDetailRow(String label, String value) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(label, style: Theme.of(context).textTheme.titleMedium),
-            Text(value, style: Theme.of(context).textTheme.bodyLarge),
-          ],
-        ),
-        const SizedBox(height: 8),
-        const Divider(
-          height: 0.1,
-          thickness: 0.1,
-          color: Colors.grey,
-        ),
-        const SizedBox(height: 8),
-      ],
-    );
+class LeaveTab extends StatefulWidget {
+  final Map<int, Map<String, int>> leaveData;
+
+  const LeaveTab({super.key, required this.leaveData});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _LeaveTabState createState() => _LeaveTabState();
+}
+
+class _LeaveTabState extends State<LeaveTab> {
+  late int _selectedYear;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedYear = widget.leaveData.keys.last;
   }
 
-  Widget _buildExperienceItem({
-    required String role,
-    required String company,
-    required String location,
-    required String date,
-    required String logoUrl,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(logoUrl),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(role, style: Theme.of(context).textTheme.titleMedium),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(company,
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on,
-                              size: 16, color: Theme.of(context).hintColor),
-                          const SizedBox(width: 4),
-                          Text(location,
-                              style: Theme.of(context).textTheme.bodyMedium),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            Icon(Icons.calendar_today,
-                size: 16, color: Theme.of(context).hintColor),
-            const SizedBox(width: 4),
-            Text(date, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Divider(
-          height: 0.1,
-          thickness: 0.1,
-          color: Colors.grey,
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
-  }
-
-  void _showEditDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            Map<String, String> editedDetails = Map.from(_personalDetails);
-            return AlertDialog(
-              title: Text('Edit Personal Details',
-                  style: Theme.of(context).textTheme.headlineSmall),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: _personalDetails.keys.map((key) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            labelText: key,
-                            labelStyle: Theme.of(context).textTheme.bodyMedium,
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Theme.of(context).secondaryHeaderColor, width: 1),
-                            ),
-                          ),
-                          controller:
-                              TextEditingController(text: editedDetails[key]),
-                          onChanged: (value) {
-                            editedDetails[key] = value;
-                          },
-                        ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Sick leave: ${widget.leaveData[_selectedYear]?['sick'] ?? '?'}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      'Casual Leave: ${widget.leaveData[_selectedYear]?['casual'] ?? '?'}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<int>(
+                    value: _selectedYear,
+                    items: widget.leaveData.keys.map((int year) {
+                      return DropdownMenuItem<int>(
+                        value: year,
+                        child: Text(year.toString()),
                       );
                     }).toList(),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        _selectedYear = newValue!;
+                      });
+                    },
+                    dropdownColor: Theme.of(context).cardColor,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    isDense: true,
+                    menuMaxHeight: 200,
+                    alignment: Alignment.centerRight,
                   ),
                 ),
-              ),
-              actions: [
-                TextButton(
-                  child: Text('Cancel',
-                      style: Theme.of(context).textTheme.labelLarge),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                ElevatedButton(
-                  child: const Text('Save',
-                      style: TextStyle(fontSize: 14, color: Colors.white)),
-                  onPressed: () {
-                    setState(() {
-                      _personalDetails = editedDetails;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
               ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            );
-          },
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: LeavesPieChart(data: widget.leaveData[_selectedYear]!),
+            ),
+          ],
         );
       },
     );

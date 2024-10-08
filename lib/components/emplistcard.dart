@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EmployeeCard extends StatelessWidget {
   final String name;
   final String role;
   final String applicationDate;
   final String email;
+  final String employeeCode; // Add this line
 
   const EmployeeCard({
     super.key,
@@ -12,6 +14,7 @@ class EmployeeCard extends StatelessWidget {
     required this.role,
     required this.applicationDate,
     required this.email,
+    required this.employeeCode, // Add this line
   });
 
   @override
@@ -40,7 +43,7 @@ class EmployeeCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(name,
-                            style: Theme.of(context).textTheme.titleLarge),
+                            style: Theme.of(context).textTheme.headlineSmall),
                         Row(
                           children: [
                             Text(role,
@@ -60,7 +63,32 @@ class EmployeeCard extends StatelessWidget {
                                       fontSize: 9)),
                             ),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 4),
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: employeeCode));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Employee code copied to clipboard')),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(employeeCode,
+                                    style: Theme.of(context).textTheme.bodySmall),
+                                const SizedBox(width: 4),
+                                Icon(Icons.copy, size: 14, color: Theme.of(context).primaryColor),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -76,7 +104,7 @@ class EmployeeCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Application Date:',
+                  Text('Date of Joining',
                       style: Theme.of(context).textTheme.labelSmall),
                   Row(
                     children: [
@@ -150,7 +178,7 @@ class EmployeeCard extends StatelessWidget {
                               Text(name,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headlineSmall),
+                                      .displaySmall),
                               const SizedBox(height: 4),
                               Text(role,
                                   style:
@@ -172,6 +200,30 @@ class EmployeeCard extends StatelessWidget {
                             ],
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: employeeCode));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Employee code copied to clipboard')),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(employeeCode,
+                                    style: Theme.of(context).textTheme.bodySmall),
+                                const SizedBox(width: 4),
+                                Icon(Icons.copy, size: 14, color: Theme.of(context).hintColor),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -181,18 +233,22 @@ class EmployeeCard extends StatelessWidget {
                         color: Color.fromARGB(255, 178, 177, 177)),
                     const SizedBox(height: 20),
                     Text('Personal Information',
-                        style: Theme.of(context).textTheme.titleLarge),
+                        style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: 10),
                     _buildDetailRow(context, 'Date of Birth', '01/01/1990', Icons.cake),
                     _buildDetailRow(context, 'Phone', '+1 234 567 8900', Icons.phone),
                     _buildDetailRow(context, 'Address', '123 Main St, City, Country', Icons.home),
                     const SizedBox(height: 20),
                     Text('Employment Information',
-                        style: Theme.of(context).textTheme.titleLarge),
+                        style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: 10),
-                    _buildDetailRow(context, 'Application Date', applicationDate, Icons.calendar_month),
+                    _buildDetailRow(context, 'Date of Joining', applicationDate, Icons.calendar_month),
                     _buildDetailRow(context, 'Email', email, Icons.mail),
-                    // Add more employment details as needed
+                    _buildDetailRow(context, 'Business Unit', 'CONSULTING-TECH', Icons.business),
+                    _buildDetailRow(context, 'Reporting Manager', 'John Doe', Icons.supervisor_account),
+                    _buildDetailRow(context, 'Mode of Employment', 'Direct', Icons.work),
+                    _buildDetailRow(context, 'Department', 'fentaMES', Icons.category),
+                    _buildDetailRow(context, 'Position', 'Team Member', Icons.work_outline),
                   ],
                 ),
               ),

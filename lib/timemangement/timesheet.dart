@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrms/timesheet/timesheetentry.dart';
+import 'package:hrms/timemangement/timesheetentry.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 // import 'package:intl/intl.dart';
 
@@ -103,16 +103,6 @@ class _TimesheetCalendarState extends State<TimesheetCalendar> {
     int totalWorkingDays = _getWorkingDaysFromJson(_selectedDate);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          // DateFormat('MMMM yyyy').format(_selectedDate),
-          "TimeSheet",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
-      ),
       body: Column(
         children: [
           Padding(

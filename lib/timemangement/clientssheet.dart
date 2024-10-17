@@ -51,30 +51,15 @@ class _ClientsSheetState extends State<ClientsSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Clients',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-            // gradient: LinearGradient(
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            //   colors: [Theme.of(context).primaryColor.withOpacity(0.1), Colors.white],
-            // ),
-            ),
-        child: ListView.builder(
-          itemCount: clients.length,
-          itemBuilder: (context, index) {
-            return ClientCard(
-              client: clients[index],
-              onEdit: () => _editClient(index),
-              onDelete: () => _deleteClient(index),
-            );
-          },
-        ),
+      body: ListView.builder(
+        itemCount: clients.length,
+        itemBuilder: (context, index) {
+          return ClientCard(
+            client: clients[index],
+            onEdit: () => _editClient(index),
+            onDelete: () => _deleteClient(index),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddClientForm,
@@ -133,6 +118,7 @@ class _ClientsSheetState extends State<ClientsSheet> {
     });
   }
 }
+
 
 class ClientForm extends StatefulWidget {
   final Client? client;

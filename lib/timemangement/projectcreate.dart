@@ -29,8 +29,8 @@ class _ProjectCreateState extends State<ProjectCreate> {
   final Map<String, List<String>> dropdownData = {
     'status': ['Initiated', 'In Progress', 'Draft', 'Hold', 'Completed'],
     'baseProject': ['HR Admin', 'CTC'],
-    'client': ['Client A', 'Client B'],
-    'currency': ['INR', 'USD', 'EUR', 'GBP'],
+    'client': ['Acme Corp', 'TechSolutions Ltd'],
+    'currency': ['INR'],
   };
 
   List<Task> tasks = [];
@@ -55,12 +55,12 @@ class _ProjectCreateState extends State<ProjectCreate> {
         role: "Manager",
         profileImage: "https://avatar.iran.liara.run/public/boy?username=Ash"),
     Employee(
-        id: "EMP003",
+        id: "EMP004",
         name: "USER D",
         role: "Developer",
         profileImage: "https://avatar.iran.liara.run/public/boy?username=Ash"),
     Employee(
-        id: "EMP003",
+        id: "EMP005",
         name: "USER E",
         role: "Trainee",
         profileImage: "https://avatar.iran.liara.run/public/boy?username=Ash"),
@@ -82,6 +82,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
     final startDateOnly =
         DateTime(startDate!.year, startDate!.month, startDate!.day);
     final todayOnly = DateTime(today.year, today.month, today.day);
+    
 
     if (startDateOnly.isBefore(todayOnly)) {
       return 'Start date cannot be in the past';
@@ -92,45 +93,6 @@ class _ProjectCreateState extends State<ProjectCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1976D2), // Replace with your primary color
-                Color(
-                    0xCC1976D2), // Replace with your primary color at 80% opacity
-              ],
-            ),
-          ),
-        ),
-        title: Row(
-          children: [
-            // const Icon(Icons.add_circle_outline, color: Colors.white),
-            const SizedBox(width: 10),
-            Text(
-              'Create Project',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 22,
-              ),
-            ),
-          ],
-        ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.info_outline, color: Colors.white),
-        //     onPressed: () {
-        //       // Show project creation info
-        //     },
-        //   ),
-        // ],
-      ),
       body: Container(
         color: const Color(0xFFF5F5F5),
         child: Padding(
@@ -237,6 +199,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
           ),
         ),
         const SizedBox(height: 16),
+
         Card(
           elevation: 4,
           shape:
@@ -524,24 +487,24 @@ class _ProjectCreateState extends State<ProjectCreate> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextButton(
-          onPressed: () {
-            if (currentTab != 1) {
+        if (currentTab == 2)
+          TextButton(
+            onPressed: () {
               setState(() {
                 currentTab--;
               });
-            }
-          },
-          child: Text("Back",
-              style: GoogleFonts.poppins(color: const Color(0xFF1E88E5))),
-        ),
+            },
+            child: Text("Back",
+                style: GoogleFonts.poppins(color: const Color(0xFF1E88E5))),
+          )
+        else
+          Container(),
         ElevatedButton(
           onPressed: () {
             if (currentTab == 1) {
               setState(() {
                 _showProjectTypeError = true;
-                _showStartDateError =
-                    true; // Show start date error when Next is clicked
+                _showStartDateError = true;
               });
               if (_formKey.currentState!.validate() &&
                   _validateProjectType() == null &&
@@ -549,14 +512,12 @@ class _ProjectCreateState extends State<ProjectCreate> {
                 setState(() {
                   currentTab++;
                   _showProjectTypeError = false;
-                  _showStartDateError =
-                      false; // Reset errors when moving to next screen
+                  _showStartDateError = false;
                 });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                      content:
-                          Text('Please fill all required fields correctly')),
+                      content: Text('Please fill all required fields correctly')),
                 );
               }
             } else if (currentTab == 2) {
@@ -705,8 +666,8 @@ class _ProjectCreateState extends State<ProjectCreate> {
       'client': selectedClient,
       'currency': selectedCurrency,
       'projectType': selectedProjectType,
-      'startDate': startDate?.toIso8601String(),
-      'endDate': endDate?.toIso8601String(),
+      'startDate': startDate?.toLocal().toString().split(' ')[0],
+      'endDate': endDate?.toLocal().toString().split(' ')[0],
       'estimationHours': estimationHoursController.text,
       'description': descriptionController.text,
       'tasks': tasks
